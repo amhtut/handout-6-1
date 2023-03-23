@@ -1,0 +1,98 @@
+#include <iostream>
+#include <ctime>
+using namespace std;
+struct node
+{
+	int info;
+	node* next;
+};
+void orderList(node*& ord, int x)
+{
+	node* r = new node;
+	r->info = x;
+	r->next = NULL;
+	node* p = ord;
+	node* q = ord;
+	if (ord == NULL)
+	{
+		ord = r;
+	}
+	else
+	{
+		while (p != NULL && x > p->info)
+		{
+			q = p;
+			p = p->next;
+		}
+		if (p == q)
+		{
+			r->next = p;
+			ord = r;
+		}
+		else
+		{
+			r->next = p;
+			q->next = r;
+		}
+
+	}
+}
+void displayList(node* p)
+{
+	node* t = p;
+	while (t != NULL)
+	{
+		cout << t->info << "->";
+		t = t->next;
+	}
+	cout << "NULL\n";
+}
+int main()
+{
+	node* ALL = NULL;
+	int a[10];
+	// Generate 10 random numbers
+	srand(time(NULL));
+	// Store in array
+	for (int i = 0; i < 10; i++)
+	{
+		a[i] = rand() % 31 + 10;
+	}
+	// Store in ordered list
+	for (int i = 0; i < 10; ++i)
+	{
+		orderList(ALL, a[i]);
+	}
+	// Display original list
+	cout << "Original list ALL: ";
+	displayList(ALL);
+	// New nodes for even and odd
+	node* EVEN = NULL, * ODD = NULL, * temp;
+	while (ALL != NULL)
+	{
+		temp = ALL->next;
+		if (ALL->info % 2 == 0)
+		{
+			ALL->next = EVEN;
+			EVEN = ALL;
+		}
+		else
+		{
+			ALL->next = ODD;
+			ODD = ALL;
+		}
+		ALL = temp;
+	}
+	ALL = EVEN;
+	while (ALL->next != NULL)
+	{
+		ALL = ALL->next;
+	}
+	ALL->next = ODD;
+	ALL = EVEN;
+	// Display new list
+	cout << "New List ALL: ";
+	displayList(ALL);
+	system("pause");
+	return 0;
+}
